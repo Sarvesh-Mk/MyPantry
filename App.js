@@ -8,9 +8,8 @@ import { useState, useRef } from 'react';
 
 export default function App() {
   const  [permission, requestPermission] =  useCameraPermissions();
-  const [permissionResponse, requestMediaPermission] = MediaLibrary.usePermissions();
+  MediaLibrary.usePermissions();
   const [cameraRef, setCameraRef] = useState(null);
-  const [photo, setPhoto] = useState(null);
 
   
   if(!permission) {
@@ -30,7 +29,6 @@ export default function App() {
     if (cameraRef) {
       const options = { quality: 1, base64: true, exif: false };
       const photo = await cameraRef.takePictureAsync(options);
-      setPhoto(photo);
       await MediaLibrary.saveToLibraryAsync(photo.uri);
       alert("saved Picture!");
     }
