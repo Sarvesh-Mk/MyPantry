@@ -1,12 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
-import { CameraView, useCameraPermissions, takePictureAsync } from 'expo-camera';
+import { CameraView, Camera, useCameraPermissions} from 'expo-camera';
 import { StyleSheet, Text, View } from 'react-native';
+import * as MediaLibrary from 'expo-media-library';
 
 import Button from "./components/Button"
+import { useState, useRef } from 'react';
 
 export default function App() {
-  const [permission, requestPermission] = useCameraPermissions();
+  const  [permission, requestPermission] =  useCameraPermissions();
+  const [permissionResponse, requestMediaPermission] = MediaLibrary.usePermissions();
+  const [cameraRef, setCameraRef] = useState(null);
+  const [photo, setPhoto] = useState(null);
 
+  
   if(!permission) {
     return <View></View>
   }
@@ -18,16 +24,23 @@ export default function App() {
       </View>
     );
   }
+  
 
-  const takeImageAsync = async () => {
-    takePictureAsync();
+  const takePicture = async () => {
+    if (cameraRef) {
+      const options = { quality: 1, base64: true, exif: false };
+      const photo = await cameraRef.takePictureAsync(options);
+      setPhoto(photo);
+      await MediaLibrary.saveToLibraryAsync(photo.uri);
+      alert("saved Picture!");
+    }
   }
 
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing='back'></CameraView>
+      <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} ></CameraView>
       <View style={styles.footerContainer}>
-        <Button Label="take a photo" onPress={takeImageAsync}/>
+        <Button Label="take a photo" onPress={takePicture}/>
       </View>
       <StatusBar style="auto" />
     </View>
