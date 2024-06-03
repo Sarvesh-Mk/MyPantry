@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { CameraView, Camera, useCameraPermissions} from 'expo-camera';
 import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
 import * as MediaLibrary from 'expo-media-library';
 
 import Button from "./components/Button"
-import { useState, useRef } from 'react';
 
 export default function App() {
   const  [permission, requestPermission] =  useCameraPermissions();
