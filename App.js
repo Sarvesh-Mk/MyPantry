@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { CameraView, useCameraPermissions, onModernBarcodeScanned} from 'expo-camera';
+import { CameraView, useCameraPermissions} from 'expo-camera';
 import { StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import * as MediaLibrary from 'expo-media-library';
@@ -10,7 +10,7 @@ export default function App() {
   const  [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const [mdeiaPermissionResponse, requestMediaPermission] = MediaLibrary.usePermissions();
   const [cameraRef, setCameraRef] = useState(null);
-  const [currentBarcode, setBarcode] = useState(null);
+  var currentBarcode = 0;
 
   
   if(!cameraPermission) {
@@ -37,12 +37,11 @@ export default function App() {
 
   const barcodeScanned = async (result) => {
     if (result.data != currentBarcode) {
-      setBarcode(result.data);
-      alert("Barcode Scanned!" + result.data);
+      currentBarcode = result.data;
+      console.log(currentBarcode)
     }
   }
   
-
   return (
     <View style={styles.container}>
       <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} onBarcodeScanned={barcodeScanned} ></CameraView>
