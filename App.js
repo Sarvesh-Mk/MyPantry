@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { CameraView, Camera, useCameraPermissions} from 'expo-camera';
+import { CameraView, useCameraPermissions, onModernBarcodeScanned} from 'expo-camera';
 import { StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
 import * as MediaLibrary from 'expo-media-library';
@@ -7,19 +7,20 @@ import * as MediaLibrary from 'expo-media-library';
 import Button from "./components/Button"
 
 export default function App() {
-  const  [permission, requestPermission] =  useCameraPermissions();
-  MediaLibrary.usePermissions();
+  const  [cameraPermission, requestCameraPermission] = useCameraPermissions();
+  const [mdeiaPermissionResponse, requestMediaPermission] = MediaLibrary.usePermissions();
   const [cameraRef, setCameraRef] = useState(null);
+  const [currentBarcode, setBarcode] = useState(null);
 
   
-  if(!permission) {
+  if(!cameraPermission) {
     return <View></View>
   }
 
-  if (!permission.granted) {
+  if (!cameraPermission.granted) {
     return (
       <View style={styles.container}>
-        <Button Label="Allow Camera" onPress={requestPermission} icon={"camera"}/>
+        <Button Label="Allow Camera" onPress={requestCameraPermission} icon={"camera"}/>
       </View>
     );
   }
@@ -34,11 +35,19 @@ export default function App() {
     }
   }
 
+  const barcodeScanned = async (result) => {
+    if (result.data != currentBarcode) {
+      setBarcode(result.data);
+      alert("Barcode Scanned!" + result.data);
+    }
+  }
+  
+
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} ></CameraView>
+      <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} onBarcodeScanned={barcodeScanned} ></CameraView>
       <View style={styles.footerContainer}>
-        <Button Label="take a photo" onPress={takePicture}/>
+        <Button Label="Scan Barcode" onPress={takePicture}/>
       </View>
       <StatusBar style="auto" />
     </View>
