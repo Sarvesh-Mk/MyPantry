@@ -1,18 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { useState } from 'react';
+import { Text } from 'react-native';
 
-class Camera {
-    constructor() {
-        this.currentBarcode = 0;
-    }
-
-    async barcodeScanned(result) {
-        if (result.data != this.currentBarcode) {
-            this.currentBarcode = result.data;
-            console.log(this.currentBarcode)
-          }
-    }
+export default function Page() {
+  return <Text>Home page</Text>;
 }
-
-
-// TBD

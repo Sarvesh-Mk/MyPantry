@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { CameraView, useCameraPermissions} from 'expo-camera';
 import { StyleSheet, Text, View } from 'react-native';
 import { useState } from 'react';
+import { Link } from 'expo-router';
 import * as MediaLibrary from 'expo-media-library';
 
 import Button from "./components/Button"
@@ -44,6 +45,7 @@ export default function App() {
   
   return (
     <View style={styles.container}>
+      <Link push href="/components/Camera">About</Link>
       <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} onBarcodeScanned={barcodeScanned} ></CameraView>
       <View style={styles.footerContainer}>
         <Button Label="Scan Barcode" onPress={takePicture}/>
