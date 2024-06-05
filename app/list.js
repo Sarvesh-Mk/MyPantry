@@ -1,10 +1,13 @@
 import { StyleSheet, View, Text } from 'react-native';
 import { useState, useEffect } from 'react';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import Button from "../components/Button";
 
 export default function listPage() {
   const [items, setItems] = useState([]);
+  const router = useRouter();
 
   const fetchData = async () => {
     const keys = await AsyncStorage.getAllKeys();
@@ -20,7 +23,7 @@ export default function listPage() {
   return (
     <View style={ styles.container }>
       <Text>listPage</Text>
-      <Link push href="/">Home</Link>
+      <Button Label="Go Home" onPress={async () => {router.replace('/')}} icon={"home"}/>
     </View>
   )
 
@@ -30,6 +33,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-evenly',
   }
 });

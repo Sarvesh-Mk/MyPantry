@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { useCameraPermissions} from 'expo-camera';
 import { StyleSheet, Text, View } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 
 import Button from "../components/Button"
 
 export default function App() {
   const  [cameraPermission, requestCameraPermission] = useCameraPermissions();
+  const router = useRouter();
 
   if(!cameraPermission) {
     return <View></View>
@@ -23,8 +24,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.footerContainer}>
-        <Link push href="/camera">Scan Barcode</Link>
-        <Link push href="/list">Go to list</Link>
+        <Button Label="Scan Barcode" onPress={async () => {router.replace('/camera')}} icon={"home"}/>
+        <Button Label="go to list" onPress={async () => {router.replace('/list')}} icon={"list"}/>
       </View>
       <StatusBar style="auto" />
     </View>

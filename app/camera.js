@@ -1,13 +1,16 @@
 import { CameraView } from "expo-camera";
 import { StyleSheet, View } from 'react-native';
 import { useState } from 'react';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import Button from "../components/Button";
 
 export default function cameraPage() {
   const [cameraRef, setCameraRef] = useState(null);
   const [isScanning, setScanning] = useState(false);
-
+  const router = useRouter();
+  
   const barcodeScanned = async (result) => {
     if (!isScanning) {
       setScanning(true);
@@ -29,7 +32,10 @@ export default function cameraPage() {
   return (
     <View style={styles.container}>
       <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} onBarcodeScanned={barcodeScanned} ></CameraView>
-      <Link push href="/">Home</Link>
+      <View style={styles.footerContainer}>
+        <Button Label="Go Home" onPress={async () => {router.replace('/')}} icon={"home"}/>
+        <Button Label="check list" onPress={async () => {router.replace('/list')}} icon={"list"}/>
+      </View>
     </View>
   )
 }
@@ -42,11 +48,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   camera: {
-    width: 320,
-    height: 440,
+    width: 340,
+    height: 540, 
   },
   footerContainer: {
-    flex: 1 / 2,
+    flex: 1,
     alignItems: 'center',
     justifyContent: "space-evenly",
   }
