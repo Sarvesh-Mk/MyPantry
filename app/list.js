@@ -1,5 +1,5 @@
-import { StyleSheet, View, text } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { useState, useEffect } from 'react';
 import { Link } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,9 +18,18 @@ export default function listPage() {
   }, []);
 
   return (
-    <View>
+    <View style={ styles.container }>
       <Text>listPage</Text>
+      <Link push href="/">Home</Link>
     </View>
   )
 
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+});

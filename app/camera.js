@@ -15,14 +15,15 @@ export default function cameraPage() {
         const strResult = JSON.stringify(result.data);
         const value = await AsyncStorage.getItem(strResult);
         if (value !== null) {
-          AsyncStorage.setItem(strResult, parseInt(value)+1);
+          await AsyncStorage.setItem(strResult, JSON.stringify(parseInt(value)+1));
         } else {
-          AsyncStorage.setItem(strResult, 1);
+          await AsyncStorage.setItem(strResult, JSON.stringify(1));
         }
       } catch (e) {
         // error reading value
       }
     }
+    setScanning(false);
   }
   
   return (
