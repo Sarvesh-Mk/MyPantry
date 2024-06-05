@@ -2,15 +2,26 @@ import { CameraView } from "expo-camera";
 import { StyleSheet, View } from 'react-native';
 import { useState } from 'react';
 import { Link } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Page() {
+export default function cameraPage() {
   const [cameraRef, setCameraRef] = useState(null);
-  var currentBarcode = 0;
+  const [isScanning, setScanning] = useState(false);
 
   const barcodeScanned = async (result) => {
-    if (result.data != currentBarcode) {
-      currentBarcode = result.data;
-      console.log(currentBarcode)
+    if (!isScanning) {
+      setScanning(true);
+      try {
+        const strResult = JSON.stringify(result.data);
+        const value = await AsyncStorage.getItem(strResult);
+        if (value !== null) {
+          AsyncStorage.setItem(strResult, parseInt(value)+1);
+        } else {
+          AsyncStorage.setItem(strResult, 1);
+        }
+      } catch (e) {
+        // error reading value
+      }
     }
   }
   

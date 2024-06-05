@@ -24,6 +24,7 @@ export default function App() {
     <View style={styles.container}>
       <View style={styles.footerContainer}>
         <Link push href="/camera">Scan Barcode</Link>
+        <Link push href="/list">Go to list</Link>
       </View>
       <StatusBar style="auto" />
     </View>
