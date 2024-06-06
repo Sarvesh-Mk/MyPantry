@@ -12,16 +12,16 @@ export default function cameraPage() {
   const router = useRouter();
   
   const barcodeScanned = async (result) => {
-    if (!isScanning) {
+    if (!isScanning && result.type != 'qr') {
       setScanning(true);
       try {
-        const strResult = JSON.stringify(result.data);
-        const value = await AsyncStorage.getItem(strResult);
+        const value = await AsyncStorage.getItem(result.data);
         if (value !== null) {
-          await AsyncStorage.setItem(strResult, JSON.stringify(parseInt(value)+1));
+          await AsyncStorage.setItem(result.data, JSON.stringify(parseInt(value)+1));
         } else {
-          await AsyncStorage.setItem(strResult, JSON.stringify(1));
+          await AsyncStorage.setItem(result.data, JSON.stringify(1));
         }
+        console.log(result.data, value)
       } catch (e) {
         // error reading value
       }

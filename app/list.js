@@ -11,10 +11,10 @@ export default function listPage() {
 
   const fetchData = async () => {
     const keys = await AsyncStorage.getAllKeys();
-    const data = await AsyncStorage.multiGet(keys);
     var allItems = [];
     for(var i=0; i < keys.length; i++){
-      allItems.push({id: keys[i], name: AsyncStorage.getItem(keys[i])})
+      var val = await AsyncStorage.getItem(keys[i]);
+      allItems.push({id: keys[i], value: val})
     }
     setItems(allItems);
   }
@@ -28,7 +28,7 @@ export default function listPage() {
       <SafeAreaView>
         <FlatList 
           data={items}
-          renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
+          renderItem={({ item }) => <Button Label={item.id} style={styles.item}></Button>}
           keyExtractor={(item) => item.id}
         />
       </SafeAreaView>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    paddingTop: 40
   },
   item: {
     padding: 20,
