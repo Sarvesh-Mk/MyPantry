@@ -29,7 +29,7 @@ export default function listPage() {
       <View style={styles.itemContainer}>
         <FlatList 
           data={items}
-          renderItem={({ item }) => <View style={styles.item}><Button Label={item.id}></Button></ View>}
+          renderItem={({ item }) => <View style={styles.item}><Button Label={item.id} theme='list'></Button></ View>}
           keyExtractor={(item) => item.id}
         />
       </View>
@@ -44,10 +44,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'space-evenly',
-    paddingBottom: 40,
   },
   itemContainer: {
-    height: 600,
+    height: 675,
     width: 375,
     alignItems: 'center',
     borderWidth: 4,
@@ -57,6 +56,5 @@ const styles = StyleSheet.create({
   item: {
     padding: 5,
     fontSize: 15,
-    marginTop: 5,
   },
 });

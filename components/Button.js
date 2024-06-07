@@ -1,23 +1,39 @@
 import { StyleSheet, View, Pressable, Text, Alert } from 'react-native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-export default function Button({Label, onPress, icon}) {
-    return (
-        <View style={[styles.ButtonContainer, { borderWidth: 4, borderColor: "#cce3de", borderRadius: 18 }]}>
-            <Pressable
-                style={[styles.button, { backgroundColor: "#fff" }]}
-                onPress={onPress}
-            >
-            <FontAwesome
-              name={icon}
-              size={18}
-              color="#25292e"
-              style={styles.buttonIcon}
-            />
-            <Text style={[styles.buttonLabel, { color: "#25292e" }]}>{Label}</Text>
-            </Pressable>
-        </View>
-    );
+export default function Button({Label, onPress, icon, theme}) {
+    if (theme=='list'){
+        return (
+            <View style={styles.listInfoBox}>
+                <Text style={styles.listBox}>{Label}</Text>
+                <Pressable
+                    style={[styles.listButton]}
+                    onPress={onPress}
+                >
+                <Text style={[styles.label, { color: "#25292e", fontSize: 15 }]}>Change</Text>
+                </Pressable>
+            </View>
+        );
+    } else {
+        return (
+            <View style={[styles.ButtonContainer, { borderWidth: 4, borderColor: "#cce3de", borderRadius: 18 }]}>
+                <Pressable
+                    style={[styles.button, { backgroundColor: "#fff" }]}
+                    onPress={onPress}
+                >
+                <FontAwesome
+                name={icon}
+                size={18}
+                color="#25292e"
+                style={styles.buttonIcon}
+                />
+                <Text style={[styles.label, { color: "#25292e" }]}>{Label}</Text>
+                </Pressable>
+            </View>
+
+        );  
+    }
+    
 }
 
 const styles = StyleSheet.create({
@@ -40,8 +56,40 @@ const styles = StyleSheet.create({
     buttonIcon: {
         paddingRight: 8,
     },
-    buttonLabel: {
+    label: {
         color: '#fff',
         fontSize: 16,
     },
+    listInfoBox: {
+        width: 320,
+        height: 75,
+        marginHorizontal: 20,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        padding: 3,
+    },
+    listBox: {
+        borderWidth: 4, 
+        borderColor: "#cce3de", 
+        borderRadius: 8, 
+        color: '#25292e',
+        width: 200,
+        height: '75%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 5,
+        fontSize: 18,
+    },
+    listButton: {
+        width: 80, 
+        height: '75%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        backgroundColor: "#6B9080", 
+        borderColor: "#cce3de", 
+        borderRadius: 8, 
+        borderWidth: 4 
+    }
 });
