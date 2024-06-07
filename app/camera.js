@@ -21,7 +21,6 @@ export default function cameraPage() {
         } else {
           await AsyncStorage.setItem(result.data, JSON.stringify(1));
         }
-        console.log(result.data, value)
       } catch (e) {
         // error reading value
       }
