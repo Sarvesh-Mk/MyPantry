@@ -24,15 +24,15 @@ export default function listPage() {
   }, []);
 
   return (
-    <View style={ styles.container }>
-      <SafeAreaView>
+    <View style={styles.container}>
+      <Button Label="Go Home" onPress={async () => {router.replace('/')}} icon={"home"}/>
+      <View style={styles.itemContainer}>
         <FlatList 
           data={items}
-          renderItem={({ item }) => <Button Label={item.id} style={styles.item}></Button>}
+          renderItem={({ item }) => <View style={styles.item}><Button Label={item.id}></Button></ View>}
           keyExtractor={(item) => item.id}
         />
-      </SafeAreaView>
-      <Button Label="Go Home" onPress={async () => {router.replace('/')}} icon={"home"}/>
+      </View>
     </View>
   )
 
@@ -40,14 +40,23 @@ export default function listPage() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    paddingTop: 40
+    flex: 1,
+    justifyContent: 'space-evenly',
+    paddingBottom: 40,
+  },
+  itemContainer: {
+    height: 600,
+    width: 375,
+    alignItems: 'center',
+    borderWidth: 4,
+    borderRadius: 8,
+    borderColor: '#cce3de'
   },
   item: {
-    padding: 20,
+    padding: 5,
     fontSize: 15,
     marginTop: 5,
-  }
+  },
 });
