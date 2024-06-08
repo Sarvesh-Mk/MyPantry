@@ -4,7 +4,7 @@ import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from "../components/Button";
-import editItemModal from "../components/editItem";
+import editItemModal from "../components/editItemInterface";
 
 export default function listPage() {
   const [items, setItems] = useState([]);
@@ -17,8 +17,9 @@ export default function listPage() {
     const keys = await AsyncStorage.getAllKeys();
     var allItems = [];
     for(var i=0; i < keys.length; i++){
-      var val = await AsyncStorage.getItem(keys[i]);
-      allItems.push({id: keys[i], value: val})
+      var val_name = await AsyncStorage.getItem(keys[i]);
+      val_name = val_name.split("§");
+      allItems.push({id: keys[i], value: val_name[0], name: val_name[1]});
     }
     setItems(allItems);
   }
@@ -36,8 +37,9 @@ export default function listPage() {
   const changeItemInfo = async () => {
     if(newText != '') {
       const val = await AsyncStorage.getItem(editedItem);
+      newStr = val + '§' + newText;
       await AsyncStorage.removeItem(editedItem);
-      await AsyncStorage.setItem(newText, val);
+      await AsyncStorage.setItem(editedItem, newStr);
       setNewText('');
       fetchData();
       setIsEditingItem(false);
@@ -54,7 +56,7 @@ export default function listPage() {
       <View style={styles.itemContainer}>
         <FlatList 
           data={items}
-          renderItem={({ item }) => <View style={styles.item}><Button Label={item.id} amt={item.value} theme='list' onPress={() => editItem(item.id)}></Button></ View>}
+          renderItem={({ item }) => <View style={styles.item}><Button Label={item.name} amt={item.value} theme='list' onPress={() => editItem(item.id)}></Button></ View>}
           keyExtractor={(item) => item.id}
         />
       </View>

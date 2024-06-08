@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useCameraPermissions} from 'expo-camera';
 import { StyleSheet, Text, View } from 'react-native';
 import { Link, useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from "../components/Button"
 

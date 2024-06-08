@@ -1,6 +1,6 @@
 import { StyleSheet, View, TextInput, Modal} from 'react-native';
 
-import Button from "../components/Button";
+import Button from "./Button";
 
 export default function editItemModal(changeItemInfo, cancelEditItem, setNewText, newText) {
   return (
@@ -9,12 +9,15 @@ export default function editItemModal(changeItemInfo, cancelEditItem, setNewText
         style={styles.input}
         onChangeText={setNewText} 
         value={newText}
+        autoFocus={true}
       />
       <View style={styles.item}><Button Label="Change Label" onPress={changeItemInfo} /></View>
       <View style={styles.item}><Button Label="Cancel" onPress={cancelEditItem} /></View>
     </View>
   )
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
