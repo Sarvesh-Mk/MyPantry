@@ -1,11 +1,12 @@
 import { StyleSheet, View, Pressable, Text, Alert } from 'react-native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-export default function Button({Label, onPress, icon, theme}) {
+export default function Button({Label, onPress, icon, theme, amt}) {
     if (theme=='list'){
         return (
             <View style={styles.listInfoBox}>
                 <Text style={styles.listBox}>{Label}</Text>
+                <Text style={[styles.listBox, {width: 60}]}>{amt}</Text>
                 <Pressable
                     style={[styles.listButton]}
                     onPress={onPress}
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     listInfoBox: {
-        width: 320,
+        width: 380,
         height: 75,
         marginHorizontal: 20,
         flex: 1,

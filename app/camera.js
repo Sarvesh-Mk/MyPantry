@@ -5,6 +5,7 @@ import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from "../components/Button";
+import editItemModal from "../components/editItem";
 
 export default function cameraPage() {
   const [cameraRef, setCameraRef] = useState(null);

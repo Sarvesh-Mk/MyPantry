@@ -1,16 +1,17 @@
-import { StyleSheet, SafeAreaView, View, TextInput, FlatList, Modal} from 'react-native';
+import { StyleSheet, View, TextInput, FlatList, Modal} from 'react-native';
 import { useState, useEffect } from 'react';
 import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from "../components/Button";
+import editItemModal from "../components/editItem";
 
 export default function listPage() {
   const [items, setItems] = useState([]);
   const router = useRouter();
-  const [isEditItem, setEditItem] = useState(false);
+  const [isEditItem, setIsEditingItem] = useState(false);
   const [editedItem, setEditedItem] = useState(null);
-  const [newText, setNewText] = useState(null) 
+  const [newText, setNewText] = useState('') 
 
   const fetchData = async () => {
     const keys = await AsyncStorage.getAllKeys();
@@ -27,18 +28,24 @@ export default function listPage() {
   }, []);
 
   const editItem = (id) => {
-    setEditItem(true);
+    setIsEditingItem(true);
     setEditedItem(id);
+    setNewText(id);
   }
 
   const changeItemInfo = async () => {
-    const val = await AsyncStorage.getItem(editedItem);
-    await AsyncStorage.setItem(newText, val);
-    await AsyncStorage.removeItem(editedItem);
+    if(newText != '') {
+      const val = await AsyncStorage.getItem(editedItem);
+      await AsyncStorage.removeItem(editedItem);
+      await AsyncStorage.setItem(newText, val);
+      setNewText('');
+      fetchData();
+      setIsEditingItem(false);
+    }
   }
 
   const cancelEditItem = () => {
-    setEditItem(false);
+    setIsEditingItem(false);
   }
 
   return (
@@ -47,20 +54,12 @@ export default function listPage() {
       <View style={styles.itemContainer}>
         <FlatList 
           data={items}
-          renderItem={({ item }) => <View style={styles.item}><Button Label={item.id} theme='list' onPress={() => editItem(item.id)}></Button></ View>}
+          renderItem={({ item }) => <View style={styles.item}><Button Label={item.id} amt={item.value} theme='list' onPress={() => editItem(item.id)}></Button></ View>}
           keyExtractor={(item) => item.id}
         />
       </View>
-      <Modal animationType="slide" transparent={true} visible={isEditItem}>
-        <View style={[styles.container, {justifyContent: 'center'}]}>
-          <TextInput
-            style={styles.input}
-            onChangeText={newText => setNewText(newText)}
-            value={editedItem}
-          />
-          <Button Label="Change Label" onPress={changeItemInfo}></Button>
-          <Button Label="Cancel" onPress={cancelEditItem}></Button>
-        </View>
+      <Modal animationType="slide" transparent={false} visible={isEditItem}>
+        {editItemModal(changeItemInfo, cancelEditItem, setNewText, newText)}
       </Modal>
     </View>
     
@@ -91,6 +90,8 @@ const styles = StyleSheet.create({
     height: 200,
     width: 350,
     fontSize: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 4,
     borderColor: '#cce3de'
   }
