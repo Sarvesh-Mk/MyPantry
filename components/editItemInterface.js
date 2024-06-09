@@ -1,8 +1,8 @@
-import { StyleSheet, View, TextInput, Modal} from 'react-native';
+import { StyleSheet, View, TextInput, Modal, Text} from 'react-native';
 
 import Button from "./Button";
 
-export default function editItemModal(changeItemInfo, cancelEditItem, setNewText, newText) {
+export default function editItemModal(changeItemInfo, cancelEditItem, setNewText, newText, amount, setAmount) {
   return (
     <View style={[styles.container, {justifyContent: 'center', flex: 1}]}>
       <TextInput
@@ -11,6 +11,9 @@ export default function editItemModal(changeItemInfo, cancelEditItem, setNewText
         value={newText}
         autoFocus={true}
       />
+      <Text style={[styles.amountText]}>Amount: {amount}</Text>
+      <View style={styles.item}><Button Label="add 1" onPress={() => {setAmount(JSON.stringify(JSON.parse(amount)+1))}}/></View>
+      <View style={styles.item}><Button Label="remove one" onPress={() => {setAmount(JSON.stringify(JSON.parse(amount)-1))}}/></View>
       <View style={styles.item}><Button Label="Change Label" onPress={changeItemInfo} /></View>
       <View style={styles.item}><Button Label="Cancel" onPress={cancelEditItem} /></View>
     </View>
@@ -39,4 +42,16 @@ const styles = StyleSheet.create({
     padding: 15,
     fontSize: 15,
   },
+  amountText: {
+    borderWidth: 4, 
+    borderColor: "#cce3de", 
+    borderRadius: 8, 
+    color: '#25292e',
+    width: 140,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+    fontSize: 18,
+  }
 });

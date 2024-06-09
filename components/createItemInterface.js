@@ -2,7 +2,7 @@ import { StyleSheet, View, TextInput, Modal} from 'react-native';
 
 import Button from "./Button";
 
-export default function createItemModal(setItemInfo, setNewText, newText) {
+export default function createItemModal(setItemInfo, setNewText, newText, cancelCreate) {
   return (
     <View style={[styles.container, {justifyContent: 'center', flex: 1}]}>
       <TextInput
@@ -11,7 +11,8 @@ export default function createItemModal(setItemInfo, setNewText, newText) {
         value={newText}
         autoFocus={true}
       />
-      <View style={styles.item}><Button Label="Change Label" onPress={setItemInfo} /></View>
+      <View style={styles.item}><Button Label="Add to Pantry" onPress={setItemInfo} /></View>
+      <View style={styles.item}><Button Label="Don't add" onPress={cancelCreate} /></View>
     </View>
   )
 }

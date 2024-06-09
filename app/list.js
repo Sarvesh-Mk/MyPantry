@@ -13,6 +13,8 @@ export default function listPage() {
   const [editedItem, setEditedItem] = useState(null);
   const [newText, setNewText] = useState('') 
 
+  const [editAmount, setEditAmount] = useState(null);
+
   const fetchData = async () => {
     const keys = await AsyncStorage.getAllKeys();
     var allItems = [];
@@ -28,26 +30,24 @@ export default function listPage() {
     fetchData();
   }, []);
 
-  const editItem = (id) => {
+  const editItem = async (id) => {
     setIsEditingItem(true);
+    var name = await AsyncStorage.getItem(id);
+    name = name.split("§");
     setEditedItem(id);
-    setNewText(id);
+    setNewText(name[1]);
+    setEditAmount(name[0]);
   }
 
   const changeItemInfo = async () => {
     if(newText != '') {
       const val = await AsyncStorage.getItem(editedItem);
-      newStr = val + '§' + newText;
-      await AsyncStorage.removeItem(editedItem);
+      newStr = editAmount + '§' + newText;
       await AsyncStorage.setItem(editedItem, newStr);
       setNewText('');
       fetchData();
       setIsEditingItem(false);
     }
-  }
-
-  const cancelEditItem = () => {
-    setIsEditingItem(false);
   }
 
   return (
@@ -61,7 +61,7 @@ export default function listPage() {
         />
       </View>
       <Modal animationType="slide" transparent={false} visible={isEditItem}>
-        {editItemModal(changeItemInfo, cancelEditItem, setNewText, newText)}
+        {editItemModal(changeItemInfo, () => {setIsEditingItem(false)}, setNewText, newText, editAmount, setEditAmount)}
       </Modal>
     </View>
     

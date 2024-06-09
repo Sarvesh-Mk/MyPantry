@@ -16,24 +16,40 @@ export default function cameraPage() {
   const [newText, setNewText] = useState('');
   const [currentId, setCurrentId] = useState(null);
 
+  const [isAddItem, setIsAddItem] = useState(false);
+  const [currentItemName, setCurrentItemName] = useState('');
+
   const setItemInfo = async () => {
     if(newText != '') {
       newStr = '1§' + newText;
       await AsyncStorage.setItem(currentId, newStr);
       setNewText('');
       setIsCreateItem(false);
+      setScanning(false);
     }
+  }
+
+  const cancelCreate = async () => {
+    setIsCreateItem(false);
+    setScanning(false);
+  }
+
+  const incrementItem = async () => {
+    const value_name = currentItemName.split("§")
+    await AsyncStorage.setItem(currentId, JSON.stringify(parseInt(value_name[0])+1) + "§" + value_name[1]);
+    setScanning(false);
+    setIsAddItem(false);
   }
 
   const barcodeScanned = async (result) => {
     if (!isScanning && result.type != 'qr') {
       setScanning(true);
       try {
-        var value_name = await AsyncStorage.getItem(result.data);
-        if (value_name !== null) {
-          value_name = value_name.split("§")
-          await AsyncStorage.setItem(result.data, JSON.stringify(parseInt(value_name[0])+1) + "§" + value_name[1]);
-          setScanning(false);
+        const value = await AsyncStorage.getItem(result.data);
+        if (value !== null) {
+          setIsAddItem(true);
+          setCurrentId(result.data);
+          setCurrentItemName(value)
         } else {
           setCurrentId(result.data);
           setIsCreateItem(true);
@@ -52,7 +68,13 @@ export default function cameraPage() {
         <Button Label="check list" onPress={async () => {router.replace('/list')}} icon={"list"}/>
       </View>
       <Modal animationType="slide" transparent={false} visible={isCreateItem}>
-        {createItemModal(setItemInfo, setNewText, newText)}
+        {createItemModal(setItemInfo, setNewText, newText, cancelCreate)}
+      </Modal>
+      <Modal animationType="slide" transparent={false} visible={isAddItem}>
+        <View style={[styles.container, {justifyContent: 'space-evenly'}]}>
+          <Button Label={"add 1 more " + currentItemName.split("§")[1]} onPress={incrementItem}/>
+          <Button Label={"Cancel"} onPress={() => {setIsAddItem(false); setScanning(false)}}/>
+        </View>
       </Modal>
     </View>
   )
