@@ -12,8 +12,13 @@ export default function editItemModal(changeItemInfo, cancelEditItem, setNewText
       />
       <Text style={[styles.amountText]}>Amount: {amount}</Text>
       <View style={styles.item}><Button Label="add 1" onPress={() => {setAmount(JSON.stringify(JSON.parse(amount)+1))}}/></View>
-      <View style={styles.item}><Button Label="remove one" onPress={() => {setAmount(JSON.stringify(JSON.parse(amount)-1))}}/></View>
-      <View style={styles.item}><Button Label="Change Label" onPress={changeItemInfo} /></View>
+      <View style={styles.item}><Button Label="remove one" onPress={() => {
+        if(JSON.parse(amount) > 1) {
+          setAmount(JSON.stringify(JSON.parse(amount)-1))
+        }
+      }}/>
+      </View>
+      <View style={styles.item}><Button Label="update" onPress={changeItemInfo} /></View>
       <View style={styles.item}><Button Label="Cancel" onPress={cancelEditItem} /></View>
       <View style={styles.item}><Button Label="Remove Item" onPress={RemoveItem} /></View>
     </View>

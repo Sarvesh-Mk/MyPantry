@@ -1,5 +1,5 @@
 import { CameraView } from "expo-camera";
-import { StyleSheet, View, Modal } from 'react-native';
+import { StyleSheet, View, Modal, Text } from 'react-native';
 import { useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -72,7 +72,10 @@ export default function cameraPage() {
       </Modal>
       <Modal animationType="slide" transparent={false} visible={isAddItem}>
         <View style={[styles.container, {justifyContent: 'space-evenly'}]}>
-          <Button Label={"add 1 more " + currentItemName.split("§")[1]} onPress={incrementItem}/>
+          <Text style={{fontSize: 40, textAlign: 'center', width: 300, height: 200}}>
+            {"You already have " + currentItemName.split("§")[0]} 
+          </Text>
+          <Button Label={"add 1 more " + currentItemName.split("§")[1] + "?"} onPress={incrementItem}/>
           <Button Label={"Cancel"} onPress={() => {setIsAddItem(false); setScanning(false)}}/>
         </View>
       </Modal>
