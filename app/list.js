@@ -1,4 +1,4 @@
-import { StyleSheet, View, TextInput, FlatList, Modal} from 'react-native';
+import { StyleSheet, View, Text, FlatList, Modal} from 'react-native';
 import { useState, useEffect } from 'react';
 import { Link, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,10 +10,12 @@ export default function listPage() {
   const [items, setItems] = useState([]);
   const router = useRouter();
   const [isEditItem, setIsEditingItem] = useState(false);
-  const [editedItem, setEditedItem] = useState(null);
+  const [editedItemID, setEditedItemID] = useState(null);
   const [newText, setNewText] = useState('') 
 
-  const [editAmount, setEditAmount] = useState(null);
+  const [editItemAmount, setEditItemAmount] = useState(null);
+  const [editItemName, setEditItemName] = useState('');
+  const [isRemoveItem, setIsRemoveItem] = useState(false);
 
   const fetchData = async () => {
     const keys = await AsyncStorage.getAllKeys();
@@ -34,20 +36,26 @@ export default function listPage() {
     setIsEditingItem(true);
     var name = await AsyncStorage.getItem(id);
     name = name.split("§");
-    setEditedItem(id);
+    setEditedItemID(id);
     setNewText(name[1]);
-    setEditAmount(name[0]);
+    setEditItemName(name[1]);
+    setEditItemAmount(name[0]);
   }
 
   const changeItemInfo = async () => {
     if(newText != '') {
-      const val = await AsyncStorage.getItem(editedItem);
-      newStr = editAmount + '§' + newText;
-      await AsyncStorage.setItem(editedItem, newStr);
+      newStr = editItemAmount + '§' + newText;
+      await AsyncStorage.setItem(editedItemID, newStr);
       setNewText('');
       fetchData();
       setIsEditingItem(false);
     }
+  }
+
+  const removeItem = async () => {
+    await AsyncStorage.removeItem(editedItemID);
+    setIsRemoveItem(false);
+    fetchData();
   }
 
   return (
@@ -61,7 +69,15 @@ export default function listPage() {
         />
       </View>
       <Modal animationType="slide" transparent={false} visible={isEditItem}>
-        {editItemModal(changeItemInfo, () => {setIsEditingItem(false)}, setNewText, newText, editAmount, setEditAmount)}
+        {editItemModal(changeItemInfo, () => {setIsEditingItem(false)}, setNewText, newText, editItemAmount, setEditItemAmount, () => {setIsRemoveItem(true); setIsEditingItem(false)})}
+      </Modal>
+      <Modal animationType="slide" transparent={false} visible={isRemoveItem}>
+        <View style={[styles.container, {flex: 1/2, paddingTop: 75}]}>
+          <Text style={{fontSize: 15, alignItems: 'center', width: 300, height: 100}}>{"Are you sure you want to delete " + editItemName + "?"}</Text>
+          <Button Label="Yes" onPress={removeItem}/>
+          <Button Label="No" onPress={() => {setIsRemoveItem(false); setIsEditingItem(true)}}/>
+        </View>
+        
       </Modal>
     </View>
     
