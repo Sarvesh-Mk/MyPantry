@@ -73,7 +73,7 @@ export default function listPage() {
       </Modal>
       <Modal animationType="slide" transparent={false} visible={isRemoveItem}>
         <View style={[styles.container, {flex: 1/2, paddingTop: 75}]}>
-          <Text style={{fontSize: 15, alignItems: 'center', width: 300, height: 100}}>{"Are you sure you want to delete " + editItemName + "?"}</Text>
+          <Text style={{fontSize: 15, textAlign: 'center', width: 300, height: 100}}>{"Are you sure you want to delete " + editItemName + "?"}</Text>
           <Button Label="Yes" onPress={removeItem}/>
           <Button Label="No" onPress={() => {setIsRemoveItem(false); setIsEditingItem(true)}}/>
         </View>

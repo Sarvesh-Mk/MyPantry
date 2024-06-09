@@ -24,8 +24,9 @@ export default function App() {
   
   return (
     <View style={styles.container}>
+      <Text style={{fontSize: 50, width: 300, height: 100, paddingBottom: 200, textAlign: 'center'}}>Welcome to Your Pantry!</Text>
       <View style={styles.footerContainer}>
-         <Button Label="Settings" onPress={async () => {router.replace('/settings')}} icon={"cog"}/>
+        <Button Label="Settings" onPress={async () => {router.replace('/settings')}} icon={"cog"}/>
         <Button Label="Scan Barcode" onPress={async () => {router.replace('/camera')}} icon={"camera"}/>
         <Button Label="go to list" onPress={async () => {router.replace('/list')}} icon={"list"}/>
       </View>
