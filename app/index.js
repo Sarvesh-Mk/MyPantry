@@ -25,7 +25,8 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.footerContainer}>
-        <Button Label="Scan Barcode" onPress={async () => {router.replace('/camera')}} icon={"home"}/>
+         <Button Label="Settings" onPress={async () => {router.replace('/settings')}} icon={"cog"}/>
+        <Button Label="Scan Barcode" onPress={async () => {router.replace('/camera')}} icon={"camera"}/>
         <Button Label="go to list" onPress={async () => {router.replace('/list')}} icon={"list"}/>
       </View>
       <StatusBar style="auto" />
