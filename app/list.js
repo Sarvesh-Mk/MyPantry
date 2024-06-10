@@ -1,6 +1,7 @@
 import { StyleSheet, View, Text, FlatList, Modal} from 'react-native';
 import { useState, useEffect } from 'react';
 import { Link, useRouter } from 'expo-router';
+import { Image } from 'expo-image'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from "../components/Button";
@@ -58,13 +59,34 @@ export default function listPage() {
     fetchData();
   }
 
+  const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['; 
+  
+  const itemDisplay = (item) => {
+    return (
+    <View style={styles.itemContainer}>
+      
+      <Image
+        style={styles.image}
+        source="../assets/icon.png"
+        placeholder={{ blurhash }}
+        contentFit="cover"
+        transition={1000}
+      />
+
+      <Button Label={item.name} amt={item.value} theme='list' onPress={() => editItem(item.id)} />
+
+    </ View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <Button Label="Go Home" onPress={async () => {router.replace('/')}} icon={"home"}/>
       <View style={styles.itemContainer}>
         <FlatList 
           data={items}
-          renderItem={({ item }) => <View style={styles.item}><Button Label={item.name} amt={item.value} theme='list' onPress={() => editItem(item.id)}></Button></ View>}
+          renderItem={({item}) => itemDisplay(item)}
           keyExtractor={(item) => item.id}
         />
       </View>
@@ -96,13 +118,14 @@ const styles = StyleSheet.create({
     height: 675,
     width: 375,
     alignItems: 'center',
-    borderWidth: 4,
-    borderRadius: 8,
-    borderColor: '#cce3de'
   },
   item: {
     padding: 5,
     fontSize: 15,
+  },
+  image: {
+    width: 164,
+    height: 157,
   },
   input: {
     height: 200,
