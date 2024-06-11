@@ -78,7 +78,6 @@ export default function listPage() {
           <Text style={{display: 'flex', width: 155, padding: 5, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', borderWidth: 4, borderRadius: 10, borderColor: '#000', fontSize: 24}}>{item.name}</Text>
           <View style={{paddingTop: 15, flexDirection: 'row', gap: 15}}>
             <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', fontSize: 24, paddingHorizontal: 20, borderWidth: 4, borderRadius: 10, borderColor: '#000'}}>{item.value}</Text>
-            {/*<Text style={{width: 77, justifyContent: 'center', textAlign: 'center', fontFamily: 'Inter', fontSize: 24, paddingLeft: 11}}>EDIT</Text>*/}
             <Pressable
               style={{width: 75, justifyContent: 'center', borderWidth: 4, borderRadius: 10, borderColor: '#000', alignSelf: 'center'}}
               onPress={() => editItem(item.id)}
@@ -87,35 +86,36 @@ export default function listPage() {
             </Pressable>
           </View>
         </View>
-        {/*onPress={editItem(item.id)*/}
       </ View>
     </View>
     )
   }
 
   return (
-    <View style={styles.container}>
-      {/*<Button Label="Go Home" onPress={async () => {router.replace('/')}} icon={"home"}/>*/}
-      <View style={styles.itemContainer}>
-        <FlatList 
-          data={items}
-          renderItem={({item}) => itemDisplay(item)}
-          keyExtractor={(item) => item.id}
-          showsVerticalScrollIndicator = {false}
-        />
-      </View>
-      <Modal animationType="slide" transparent={false} visible={isEditItem}>
-        {editItemModal(changeItemInfo, () => {setIsEditingItem(false)}, setNewText, newText, editItemAmount, setEditItemAmount, () => {setIsRemoveItem(true); setIsEditingItem(false)})}
-      </Modal>
-      <Modal animationType="slide" transparent={false} visible={isRemoveItem}>
-        <View style={[styles.container, {flex: 1/2, paddingTop: 75}]}>
-          <Text style={{fontSize: 15, textAlign: 'center', width: 300, height: 100}}>{"Are you sure you want to delete " + editItemName + "?"}</Text>
-          <Button Label="Yes" onPress={removeItem}/>
-          <Button Label="No" onPress={() => {setIsRemoveItem(false); setIsEditingItem(true)}}/>
+    <View style={{height: 775, alignItems: 'center'}}>
+      <View style={styles.container}>
+        <View style={styles.itemContainer}>
+          <FlatList 
+            data={items}
+            renderItem={({item}) => itemDisplay(item)}
+            keyExtractor={(item) => item.id}
+            showsVerticalScrollIndicator = {false}
+          />
         </View>
-      </Modal>
-      <Navbar />
+        <Modal animationType="slide" transparent={false} visible={isEditItem}>
+          {editItemModal(changeItemInfo, () => {setIsEditingItem(false)}, setNewText, newText, editItemAmount, setEditItemAmount, () => {setIsRemoveItem(true); setIsEditingItem(false)})}
+        </Modal>
+        <Modal animationType="slide" transparent={false} visible={isRemoveItem}>
+          <View style={[styles.container, {flex: 1/2, paddingTop: 75}]}>
+            <Text style={{fontSize: 15, textAlign: 'center', width: 300, height: 100}}>{"Are you sure you want to delete " + editItemName + "?"}</Text>
+            <Button Label="Yes" onPress={removeItem}/>
+            <Button Label="No" onPress={() => {setIsRemoveItem(false); setIsEditingItem(true)}}/>
+          </View>
+        </Modal>
+      </View>
+      <Navbar />  
     </View>
+    
     
   )
 
