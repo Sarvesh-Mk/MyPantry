@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, FlatList, Modal} from 'react-native';
+import { StyleSheet, View, Text, FlatList, Modal ,Pressable} from 'react-native';
 import { useState, useEffect } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Image } from 'expo-image'
@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Button from "../components/Button";
 import editItemModal from "../components/editItemInterface";
+import Navbar from "../components/navbar";
 
 export default function listPage() {
   const [items, setItems] = useState([]);
@@ -64,30 +65,43 @@ export default function listPage() {
   
   const itemDisplay = (item) => {
     return (
-    <View style={styles.itemContainer}>
-      
-      <Image
-        style={styles.image}
-        source="../assets/icon.png"
-        placeholder={{ blurhash }}
-        contentFit="cover"
-        transition={1000}
-      />
-
-      <Button Label={item.name} amt={item.value} theme='list' onPress={() => editItem(item.id)} />
-
-    </ View>
+    <View style={{paddingBottom: 17}}>
+        <View style={{width: 370, height: 160, flexDirection: 'row', paddingLeft: 14, borderWidth: 4, borderRadius: 5, borderColor: '#000', justifyContent: 'center', alignSelf: 'center'}}>
+        <Image
+          style={{width: 166, height: 130, alignSelf: 'center'}}
+          source="../assets/icon.png"
+          placeholder={{ blurhash }}
+          contentFit="cover"
+          transition={1000}
+        />
+        <View style={{paddingLeft: 2, flexDirection: 'column', width: 195, paddingTop: 15, alignItems: 'center'}}>
+          <Text style={{display: 'flex', width: 155, padding: 5, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', borderWidth: 4, borderRadius: 10, borderColor: '#000', fontSize: 24}}>{item.name}</Text>
+          <View style={{paddingTop: 15, flexDirection: 'row', gap: 15}}>
+            <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', fontSize: 24, paddingHorizontal: 20, borderWidth: 4, borderRadius: 10, borderColor: '#000'}}>{item.value}</Text>
+            {/*<Text style={{width: 77, justifyContent: 'center', textAlign: 'center', fontFamily: 'Inter', fontSize: 24, paddingLeft: 11}}>EDIT</Text>*/}
+            <Pressable
+              style={{width: 75, justifyContent: 'center', borderWidth: 4, borderRadius: 10, borderColor: '#000', alignSelf: 'center'}}
+              onPress={() => editItem(item.id)}
+            >
+            <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Edit</Text>  
+            </Pressable>
+          </View>
+        </View>
+        {/*onPress={editItem(item.id)*/}
+      </ View>
+    </View>
     )
   }
 
   return (
     <View style={styles.container}>
-      <Button Label="Go Home" onPress={async () => {router.replace('/')}} icon={"home"}/>
+      {/*<Button Label="Go Home" onPress={async () => {router.replace('/')}} icon={"home"}/>*/}
       <View style={styles.itemContainer}>
         <FlatList 
           data={items}
           renderItem={({item}) => itemDisplay(item)}
           keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator = {false}
         />
       </View>
       <Modal animationType="slide" transparent={false} visible={isEditItem}>
@@ -99,8 +113,8 @@ export default function listPage() {
           <Button Label="Yes" onPress={removeItem}/>
           <Button Label="No" onPress={() => {setIsRemoveItem(false); setIsEditingItem(true)}}/>
         </View>
-        
       </Modal>
+      <Navbar />
     </View>
     
   )
@@ -124,7 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   image: {
-    width: 164,
+    width: 176,
     height: 157,
   },
   input: {

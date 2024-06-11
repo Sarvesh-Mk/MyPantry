@@ -2,38 +2,22 @@ import { StyleSheet, View, Pressable, Text, Alert } from 'react-native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function Button({Label, onPress, icon, theme, amt}) {
-    if (theme=='list'){
-        return (
-            <View style={styles.listInfoBox}>
-                <Text style={styles.listBox}>{Label}</Text>
-                <Text style={[styles.listBox, {width: 60}]}>{amt}</Text>
-                <Pressable
-                    style={[styles.listButton]}
-                    onPress={onPress}
-                >
-                <Text style={[styles.label, { color: "#25292e", fontSize: 15 }]}>Change</Text>
-                </Pressable>
-            </View>
-        );
-    } else {
-        return (
-            <View style={[styles.ButtonContainer, { borderWidth: 4, borderColor: "#cce3de", borderRadius: 18 }]}>
-                <Pressable
-                    style={[styles.button, { backgroundColor: "#fff" }]}
-                    onPress={onPress}
-                >
-                <FontAwesome
-                name={icon}
-                size={18}
-                color="#25292e"
-                style={styles.buttonIcon}
-                />
-                <Text style={[styles.label, { color: "#25292e" }]}>{Label}</Text>
-                </Pressable>
-            </View>
-
-        );  
-    }
+    return (
+        <View style={[styles.ButtonContainer, { borderWidth: 4, borderColor: "#cce3de", borderRadius: 18 }]}>
+            <Pressable
+                style={[styles.button, { backgroundColor: "#fff" }]}
+                onPress={onPress}
+            >
+            <FontAwesome
+            name={icon}
+            size={18}
+            color="#25292e"
+            style={styles.buttonIcon}
+            />
+            <Text style={[styles.label, { color: "#25292e" }]}>{Label}</Text>
+            </Pressable>
+        </View>
+    );  
     
 }
 

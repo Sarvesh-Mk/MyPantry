@@ -17,7 +17,7 @@ export default function cameraPage() {
   const [currentId, setCurrentId] = useState(null);
 
   const [isAddItem, setIsAddItem] = useState(false);
-  const [currentItemName, setCurrentItemName] = useState('');
+  const [currentItem, setCurrentItem] = useState('');
 
   const setItemInfo = async () => {
     if(newText != '') {
@@ -35,7 +35,7 @@ export default function cameraPage() {
   }
 
   const incrementItem = async () => {
-    const value_name = currentItemName.split("§")
+    const value_name = currentItem.split("§")
     await AsyncStorage.setItem(currentId, JSON.stringify(parseInt(value_name[0])+1) + "§" + value_name[1]);
     setScanning(false);
     setIsAddItem(false);
@@ -49,7 +49,7 @@ export default function cameraPage() {
         if (value !== null) {
           setIsAddItem(true);
           setCurrentId(result.data);
-          setCurrentItemName(value)
+          setCurrentItem(value)
         } else {
           setCurrentId(result.data);
           setIsCreateItem(true);
@@ -73,9 +73,9 @@ export default function cameraPage() {
       <Modal animationType="slide" transparent={false} visible={isAddItem}>
         <View style={[styles.container, {justifyContent: 'space-evenly'}]}>
           <Text style={{fontSize: 40, textAlign: 'center', width: 300, height: 200}}>
-            {"You already have " + currentItemName.split("§")[0]} 
+            {"You already have " + currentItem.split("§")[0]} 
           </Text>
-          <Button Label={"add 1 more " + currentItemName.split("§")[1] + "?"} onPress={incrementItem}/>
+          <Button Label={"add 1 more " + currentItem.split("§")[1] + "?"} onPress={incrementItem}/>
           <Button Label={"Cancel"} onPress={() => {setIsAddItem(false); setScanning(false)}}/>
         </View>
       </Modal>
