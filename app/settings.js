@@ -36,7 +36,7 @@ export default function Settings() {
             <Text style={{fontSize: 40, textAlign: 'center', width: 300, height: 200}}>
               Are you sure you want to clear the list?
             </Text>
-            <View style={styles.footerContainer}>
+            <View style={[styles.footerContainer, {flexDirection: 'row'}]}>
               <Pressable
                 style={{width: '30%', padding: 5, paddingHorizontal: 30, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
                 onPress={clearList}

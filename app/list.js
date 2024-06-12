@@ -73,9 +73,9 @@ export default function listPage() {
           contentFit="cover"
         />
         <View style={{paddingLeft: 2, flexDirection: 'column', width: 195, paddingTop: 15, alignItems: 'center'}}>
-          <Text style={{display: 'flex', width: 155, padding: 5, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}} adjustsFontSizeToFit={true} numberOfLines={3}>{item.name}</Text>
-          <View style={{paddingTop: 15, flexDirection: 'row', gap: 15}}>
-            <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', fontSize: 24, paddingHorizontal: 20, borderWidth: 4, borderRadius: 4, borderColor: '#000'}}>{item.value}</Text>
+          <Text style={{display: 'flex', width: 155, padding: 5, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 20}} adjustsFontSizeToFit={true} numberOfLines={2}>{item.name}</Text>
+          <View style={{paddingTop: 15, flexDirection: 'row', gap: 5}}>
+            <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', fontSize: 20, paddingHorizontal: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000'}} adjustsFontSizeToFit={true} numberOfLines={2}>{item.value}</Text>
             <Pressable
               style={{width: 75, justifyContent: 'center', borderWidth: 4, borderRadius: 10, borderColor: '#000', alignSelf: 'center'}}
               onPress={() => editItem(item.id)}

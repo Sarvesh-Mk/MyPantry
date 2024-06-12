@@ -1,12 +1,18 @@
 import { StyleSheet, View, TextInput, Pressable, Text, KeyboardAvoidingView, Platform } from 'react-native';
+import { useState } from 'react';
 
 export default function editItemModal(changeItemInfo, cancelEditItem, setNewText, newText, amount, setAmount, RemoveItem) {
+  const [defaultText, setDefaultText] = useState('');
+
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={[styles.container, {justifyContent: 'center', gap: 40, paddingTop: 50}]}>
       <TextInput
         style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 20, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
         onChangeText={setNewText} 
         value={newText}
+        autoFocus={false}
+        onSubmitEditing={() => {if (newText=='') {setNewText(defaultText)}}}
+        onFocus={() => {setNewText(''); setDefaultText(newText)}}
       />
       
       <View style={{flexDirection: 'row', justifyContent: 'center',  alignItems: 'center', gap: '20%', width: '75%'}}>
@@ -35,9 +41,9 @@ export default function editItemModal(changeItemInfo, cancelEditItem, setNewText
       <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '20%', width: '75%'}}>
         <Pressable
           style={{width: '45%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
-          onPress={changeItemInfo}
+          onPress={RemoveItem}
         >
-        <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>update</Text>  
+        <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>delete</Text>  
         </Pressable> 
         
         <Pressable
@@ -49,9 +55,9 @@ export default function editItemModal(changeItemInfo, cancelEditItem, setNewText
       </View>
       <Pressable
         style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
-        onPress={RemoveItem}
+        onPress={changeItemInfo}
       >
-      <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Delete?</Text>  
+      <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Update</Text>  
       </Pressable> 
     </KeyboardAvoidingView>
   )

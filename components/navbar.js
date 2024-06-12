@@ -1,9 +1,11 @@
-import { View, Pressable} from 'react-native';
+import { View, Pressable } from 'react-native';
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function Navbar() {
   const router = useRouter();
+  const [page, setPage] = useState('/')
 
   const barItem = (icon, onPress) => {
     return (
