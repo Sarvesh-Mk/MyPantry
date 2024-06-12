@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { useCameraPermissions} from 'expo-camera';
 import { StyleSheet, Text, View, Pressable} from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -33,7 +33,16 @@ export default function App() {
     .catch(error => {
       console.error(error);
     });
+    for(var x=0; x<results.length; x++) {
+      console.log(results[x].id);
+    }
   };
+  
+  
+  useEffect(() => {
+    searchProducts();
+  }, []);
+  
 
   if (!cameraPermission.granted) {
     return (
@@ -53,12 +62,6 @@ export default function App() {
       <View style={styles.container}>
         <Text style={{fontSize: 50, width: 300, height: 100, paddingBottom: 200, textAlign: 'center'}}>Welcome to Your Pantry!</Text>
         <View style={styles.footerContainer}>
-          <Pressable
-            style={{width: '75%', paddingHorizontal: 20, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
-            onPress={searchProducts}
-          >
-          <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>search</Text>  
-          </Pressable>
         </View>
         <StatusBar style="auto" />
       </View>
