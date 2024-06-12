@@ -1,19 +1,34 @@
-import { StyleSheet, View, TextInput, Modal} from 'react-native';
-
-import Button from "./Button";
+import { StyleSheet, View,  Text, TextInput, Pressable, KeyboardAvoidingView, Platform, } from 'react-native';
 
 export default function createItemModal(setItemInfo, setNewText, newText, cancelCreate) {
+  
   return (
-    <View style={[styles.container, {justifyContent: 'center', flex: 1}]}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={[styles.container, {justifyContent: 'center', gap: 40, paddingTop: 50}]}>
       <TextInput
-        style={styles.input}
+        style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 20, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
         onChangeText={setNewText} 
         value={newText}
-        autoFocus={true}
+        autoFocus={false}
+        onFocus={() => {console.log(newText); setNewText('')}}
       />
-      <View style={styles.item}><Button Label="Add to Pantry" onPress={setItemInfo} /></View>
-      <View style={styles.item}><Button Label="Don't add" onPress={cancelCreate} /></View>
-    </View>
+      <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: '20%'}}>
+        <Pressable
+          style={{width: '30%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+          onPress={setItemInfo}
+        >
+        <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Add to Pantry</Text>  
+        </Pressable> 
+
+        <Pressable
+          style={{width: '30%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+          onPress={cancelCreate}
+        >
+        <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Don't add</Text>  
+        </Pressable>    
+      </View>
+      
+    </KeyboardAvoidingView>
+      
   )
 }
 

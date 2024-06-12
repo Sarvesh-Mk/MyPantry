@@ -1,10 +1,9 @@
 import { CameraView } from "expo-camera";
-import { StyleSheet, View, Modal, Text } from 'react-native';
+import { StyleSheet, View, Modal, Text, Pressable } from 'react-native';
 import { useState } from 'react';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Button from "../components/Button";
 import createItemModal from "../components/createItemInterface";
 import Navbar from "../components/navbar";
 
@@ -52,6 +51,7 @@ export default function cameraPage() {
           setCurrentId(result.data);
           setCurrentItem(value)
         } else {
+          setNewText('Click To Add Item Name');
           setCurrentId(result.data);
           setIsCreateItem(true);
         }
@@ -62,20 +62,38 @@ export default function cameraPage() {
   }
   
   return (
-    <View style={{height: 775, alignItems: 'center'}}>
+    <View style={{height: '100%', alignItems: 'center'}}>
       <View style={styles.container}>
         <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} onBarcodeScanned={barcodeScanned} ></CameraView>
         <Modal animationType="slide" transparent={false} visible={isCreateItem}>
           {createItemModal(setItemInfo, setNewText, newText, cancelCreate)}
         </Modal>
         <Modal animationType="slide" transparent={false} visible={isAddItem}>
-          <View style={[styles.container, {justifyContent: 'space-evenly'}]}>
+          <View style={[styles.container, {justifyContent: 'center', gap: 35}]}>
+            <Text style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 20, padding: 5, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}>{"You already have " + currentItem.split("§")[0]}</Text>
+            <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: '20%'}}>
+              <Pressable
+                style={{width: '30%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+                onPress={incrementItem}
+              >
+              <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>add 1 more</Text>  
+              </Pressable> 
+
+              <Pressable
+                style={{width: '30%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 25, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+                onPress={() => {setIsAddItem(false); setScanning(false)}}
+              >
+              <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Cancel</Text>  
+              </Pressable>  
+            </View>  
+          </View>
+          {/*<View style={[styles.container, {justifyContent: 'space-evenly'}]}>
             <Text style={{fontSize: 40, textAlign: 'center', width: 300, height: 200}}>
               {"You already have " + currentItem.split("§")[0]} 
             </Text>
             <Button Label={"add 1 more " + currentItem.split("§")[1] + "?"} onPress={incrementItem}/>
             <Button Label={"Cancel"} onPress={() => {setIsAddItem(false); setScanning(false)}}/>
-          </View>
+          </View>*/}
         </Modal>
       </View>  
       <Navbar />
@@ -93,7 +111,7 @@ const styles = StyleSheet.create({
   },
   camera: {
     width: 360,
-    height: 700, 
+    height: 680, 
   },
   footerContainer: {
     flex: 1,

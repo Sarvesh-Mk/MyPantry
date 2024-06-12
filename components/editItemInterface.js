@@ -1,27 +1,59 @@
-import { StyleSheet, View, TextInput, Modal, Text} from 'react-native';
-
-import Button from "./Button";
+import { StyleSheet, View, TextInput, Pressable, Text, KeyboardAvoidingView, Platform } from 'react-native';
 
 export default function editItemModal(changeItemInfo, cancelEditItem, setNewText, newText, amount, setAmount, RemoveItem) {
   return (
-    <View style={[styles.container, {justifyContent: 'center', flex: 1}]}>
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={[styles.container, {justifyContent: 'center', gap: 40, paddingTop: 50}]}>
       <TextInput
-        style={styles.input}
+        style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 20, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
         onChangeText={setNewText} 
         value={newText}
       />
-      <Text style={[styles.amountText]}>Amount: {amount}</Text>
-      <View style={styles.item}><Button Label="add 1" onPress={() => {setAmount(JSON.stringify(JSON.parse(amount)+1))}}/></View>
-      <View style={styles.item}><Button Label="remove one" onPress={() => {
-        if(JSON.parse(amount) > 1) {
-          setAmount(JSON.stringify(JSON.parse(amount)-1))
-        }
-      }}/>
+      
+      <View style={{flexDirection: 'row', justifyContent: 'center',  alignItems: 'center', gap: '20%', width: '75%'}}>
+        <Text style={{width: '40%', paddingVertical: '15%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', fontSize: 24, borderWidth: 4, borderRadius: 4, borderColor: '#000'}}>{amount}</Text>
+        <View style={{flexDirection: 'column', gap: 15, alignItems: 'center'}}>
+          <Pressable
+            style={{paddingHorizontal: 30, padding: 5, justifyContent: 'center', borderWidth: 4, borderRadius: 4, borderColor: '#000', alignSelf: 'center'}}
+            onPress={() => {setAmount(JSON.stringify(JSON.parse(amount)+1))}}
+          >
+          <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Add 1</Text>  
+          </Pressable>
+          
+          <Pressable
+            style={{justifyContent: 'center', borderWidth: 4, borderRadius: 4, borderColor: '#000', alignSelf: 'center', padding: 5}}
+            onPress={() => {
+              if(JSON.parse(amount) > 1) {
+                setAmount(JSON.stringify(JSON.parse(amount)-1))
+              }}
+            }
+          >
+          <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Remove 1</Text>  
+          </Pressable>
+        </View>
       </View>
-      <View style={styles.item}><Button Label="update" onPress={changeItemInfo} /></View>
-      <View style={styles.item}><Button Label="Cancel" onPress={cancelEditItem} /></View>
-      <View style={styles.item}><Button Label="Remove Item" onPress={RemoveItem} /></View>
-    </View>
+
+      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '20%', width: '75%'}}>
+        <Pressable
+          style={{width: '45%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+          onPress={changeItemInfo}
+        >
+        <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>update</Text>  
+        </Pressable> 
+        
+        <Pressable
+          style={{width: '45%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+          onPress={cancelEditItem}
+        >
+        <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>cancel</Text>  
+        </Pressable>  
+      </View>
+      <Pressable
+        style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+        onPress={RemoveItem}
+      >
+      <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Delete?</Text>  
+      </Pressable> 
+    </KeyboardAvoidingView>
   )
 }
 
@@ -33,30 +65,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'space-evenly',
-  },
-  input: {
-    height: 200,
-    width: 350,
-    fontSize: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 4,
-    borderColor: '#cce3de'
-  },
-  item: {
-    padding: 15,
-    fontSize: 15,
-  },
-  amountText: {
-    borderWidth: 4, 
-    borderColor: "#cce3de", 
-    borderRadius: 8, 
-    color: '#25292e',
-    width: 140,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 5,
-    fontSize: 18,
   }
 });

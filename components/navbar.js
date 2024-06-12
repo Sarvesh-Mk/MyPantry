@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, FlatList, Modal ,Pressable} from 'react-native';
+import { View, Pressable} from 'react-native';
 import { useRouter } from 'expo-router';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 

@@ -1,9 +1,8 @@
-import { StyleSheet, View, Text, Modal} from 'react-native';
-import { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, Modal, Pressable} from 'react-native';
+import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Button from "../components/Button";
 import Navbar from '../components/navbar';
 
 export default function Settings() {
@@ -18,13 +17,18 @@ export default function Settings() {
   } 
 
   return (
-    <View style={{height: 775, alignItems: 'center'}}>
+    <View style={{height: '100%', alignItems: 'center'}}>
       <View style={styles.container}>
         <Text style={{fontSize: 40, textAlign: 'center', width: 300, height: 200}}>
           Settings
         </Text>
         <View style={styles.footerContainer}>
-          <Button Label="Clear list" onPress={() => {setIsClear(true)}}/>
+          <Pressable
+            style={{width: '75%', paddingHorizontal: 20, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+            onPress={() => setIsClear(true)}
+          >
+          <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Clear List</Text>  
+          </Pressable>
         </View>
         
         <Modal animationType="slide" transparent={false} visible={isClear}>
@@ -33,8 +37,19 @@ export default function Settings() {
               Are you sure you want to clear the list?
             </Text>
             <View style={styles.footerContainer}>
-              <Button Label="Yes" onPress={clearList}/>
-              <Button Label="no" onPress={() => {setIsClear(false)}}/>
+              <Pressable
+                style={{width: '30%', padding: 5, paddingHorizontal: 30, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+                onPress={clearList}
+              >
+              <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>yes</Text>  
+              </Pressable> 
+
+              <Pressable
+                style={{width: '30%', padding: 5, paddingHorizontal: 30, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
+                onPress={() => {setIsClear(false)}}
+              >
+              <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>no</Text>  
+              </Pressable>  
             </View>
           </View>
         </Modal>
@@ -54,8 +69,8 @@ const styles = StyleSheet.create({
     height: 390,
   },
   footerContainer: {
-    flex: 1 / 2,
     alignItems: 'center',
-    justifyContent: "space-evenly",
+    justifyContent: "center",
+    gap: 30,
   }
 });
