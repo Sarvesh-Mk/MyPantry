@@ -9,6 +9,7 @@ export default function createItemModal(setItemInfo, setNewText, newText, cancel
         onChangeText={setNewText} 
         value={newText}
         autoFocus={false}
+        multiline={true}
       />
       <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: '20%'}}>
         <Pressable

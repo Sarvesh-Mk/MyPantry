@@ -60,10 +60,7 @@ export default function listPage() {
     await AsyncStorage.removeItem(editedItemID);
     setIsRemoveItem(false);
     fetchData();
-  }
-
-  const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['; 
+  } 
   
   const itemDisplay = (item) => {
     const imageSource = item.image  ? { uri: item.image } : require("../assets/images/no-image-found.png")

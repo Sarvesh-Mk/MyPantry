@@ -23,7 +23,7 @@ export default function App() {
       <View style={styles.container}>
         <Pressable
           style={{width: '75%', paddingHorizontal: 20, alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
-          onPress={() => requestCameraPermission}
+          onPress={requestCameraPermission}
         >
         <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>Allow Camera</Text>  
         </Pressable>
