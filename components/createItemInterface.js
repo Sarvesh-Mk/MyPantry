@@ -9,7 +9,6 @@ export default function createItemModal(setItemInfo, setNewText, newText, cancel
         onChangeText={setNewText} 
         value={newText}
         autoFocus={false}
-        onFocus={() => {setNewText('')}}
       />
       <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: '20%'}}>
         <Pressable

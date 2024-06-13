@@ -11,37 +11,11 @@ import Navbar from '../components/navbar';
 export default function App() {
   const  [cameraPermission, requestCameraPermission] = useCameraPermissions();
   const router = useRouter();
-  const [query, setQuery] = useState('celcius');
-  const [results, setResults] = useState([]);
+  
 
   if(!cameraPermission) {
     return <View></View>
   }
-
-  const searchProducts = () => {
-    axios.get(`https://world.openfoodfacts.org/cgi/search.pl`, {
-      params: {
-        search_terms: query,
-        search_simple: 1,
-        action: 'process',
-        json: 1,
-      }
-    })
-    .then(response => {
-      setResults(response.data.products);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-    for(var x=0; x<results.length; x++) {
-      console.log(results[x].id);
-    }
-  };
-  
-  
-  useEffect(() => {
-    searchProducts();
-  }, []);
   
 
   if (!cameraPermission.granted) {

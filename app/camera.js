@@ -3,6 +3,7 @@ import { StyleSheet, View, Modal, Text, Pressable } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 import createItemModal from "../components/createItemInterface";
 import Navbar from "../components/navbar";
@@ -14,19 +15,40 @@ export default function cameraPage() {
 
   const [isCreateItem, setIsCreateItem] = useState(false);
   const [newText, setNewText] = useState('');
-  const [currentId, setCurrentId] = useState(null);
-
   const [isAddItem, setIsAddItem] = useState(false);
+  
+  const [currentId, setCurrentId] = useState(null);
   const [currentItem, setCurrentItem] = useState('');
+  const [currentImageUrl, setImageUrl] = useState('');
+  const [isSearchingWeb, setSearchWeb] = useState(false);
 
   const setItemInfo = async () => {
     if(newText != '') {
-      newStr = '1§' + newText;
-      await AsyncStorage.setItem(currentId, newStr);
+      await AsyncStorage.setItem(currentId, JSON.stringify({id: currentId, name: newText, amount: 1, image: currentImageUrl}));
       setNewText('');
       setIsCreateItem(false);
       setScanning(false);
     }
+  }
+
+  const getItemFromBarcode = async (barcode) => {
+    setImageUrl('');
+    axios.get(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`)
+      .then(response => {
+        if(response.data.product){
+          var product = [];
+          product = response.data.product; 
+          setNewText(product.brands + ' ' + product.product_name);
+          setImageUrl(product.image_url)
+        } else {
+          console.log('couldnt find item');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    setSearchWeb(false);
+    
   }
 
   const cancelCreate = async () => {
@@ -35,8 +57,9 @@ export default function cameraPage() {
   }
 
   const incrementItem = async () => {
-    const value_name = currentItem.split("§")
-    await AsyncStorage.setItem(currentId, JSON.stringify(parseInt(value_name[0])+1) + "§" + value_name[1]);
+    var item = currentItem;
+    item.amount += 1;
+    await AsyncStorage.setItem(currentId, JSON.stringify(item));
     setScanning(false);
     setIsAddItem(false);
   }
@@ -49,10 +72,12 @@ export default function cameraPage() {
         if (value !== null) {
           setIsAddItem(true);
           setCurrentId(result.data);
-          setCurrentItem(value)
+          setCurrentItem(JSON.parse(value))
         } else {
-          setNewText('Click To Add Item Name');
-          setCurrentId(result.data);
+          setNewText('Add Item Name');
+          setCurrentId(result.data); 
+          setSearchWeb(true);  
+          await getItemFromBarcode(result.data);
           setIsCreateItem(true);
         }
       } catch (e) {
@@ -65,12 +90,12 @@ export default function cameraPage() {
     <View style={{height: '100%', alignItems: 'center'}}>
       <View style={styles.container}>
         <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} onBarcodeScanned={barcodeScanned} ></CameraView>
-        <Modal animationType="slide" transparent={false} visible={isCreateItem}>
+        <Modal animationType="slide" transparent={false} visible={isCreateItem && !isSearchingWeb}>
           {createItemModal(setItemInfo, setNewText, newText, cancelCreate)}
         </Modal>
         <Modal animationType="slide" transparent={false} visible={isAddItem}>
           <View style={[styles.container, {justifyContent: 'center', gap: 35}]}>
-            <Text style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 20, padding: 5, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}>{"You already have " + currentItem.split("§")[0]}</Text>
+            <Text style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 20, padding: 5, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}>{"You already have " + currentItem.amount}</Text>
             <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: '20%'}}>
               <Pressable
                 style={{width: '30%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
@@ -87,13 +112,6 @@ export default function cameraPage() {
               </Pressable>  
             </View>  
           </View>
-          {/*<View style={[styles.container, {justifyContent: 'space-evenly'}]}>
-            <Text style={{fontSize: 40, textAlign: 'center', width: 300, height: 200}}>
-              {"You already have " + currentItem.split("§")[0]} 
-            </Text>
-            <Button Label={"add 1 more " + currentItem.split("§")[1] + "?"} onPress={incrementItem}/>
-            <Button Label={"Cancel"} onPress={() => {setIsAddItem(false); setScanning(false)}}/>
-          </View>*/}
         </Modal>
       </View>  
       <Navbar />
