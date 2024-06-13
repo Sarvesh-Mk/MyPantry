@@ -14,13 +14,13 @@ export default function cameraPage() {
   const router = useRouter();
 
   const [isCreateItem, setIsCreateItem] = useState(false);
-  const [newText, setNewText] = useState('');
+  const newText = '';
   const [isAddItem, setIsAddItem] = useState(false);
   
   const [currentId, setCurrentId] = useState(null);
   const [currentItem, setCurrentItem] = useState('');
   const [currentImageUrl, setImageUrl] = useState('');
-  const [isSearchingWeb, setSearchWeb] = useState(false);
+  const isSearchingWeb = false;
 
   const setItemInfo = async () => {
     if(newText != '') {
@@ -31,24 +31,25 @@ export default function cameraPage() {
     }
   }
 
-  const getItemFromBarcode = async (barcode) => {
+  const getItemFromBarcode = (barcode) => {
     setImageUrl('');
     axios.get(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`)
       .then(response => {
         if(response.data.product){
           var product = [];
           product = response.data.product; 
-          setNewText(product.brands + ' ' + product.product_name);
+          newText = product.brands + ' ' + product.product_name;
           setImageUrl(product.image_url)
         } else {
-          console.log('couldnt find item');
+          newText='Add Item Name';
         }
+        setSearchWeb(false);
+        setIsCreateItem(true);
+        console.log(isCreateItem, isSearchingWeb, newText);
       })
       .catch(error => {
         console.error(error);
       });
-    setSearchWeb(false);
-    
   }
 
   const cancelCreate = async () => {
@@ -74,11 +75,10 @@ export default function cameraPage() {
           setCurrentId(result.data);
           setCurrentItem(JSON.parse(value))
         } else {
-          setNewText('Add Item Name');
+          setNewText('');
           setCurrentId(result.data); 
           setSearchWeb(true);  
-          await getItemFromBarcode(result.data);
-          setIsCreateItem(true);
+          getItemFromBarcode(result.data);
         }
       } catch (e) {
         //console.log(e)
@@ -90,7 +90,14 @@ export default function cameraPage() {
     <View style={{height: '100%', alignItems: 'center'}}>
       <View style={styles.container}>
         <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} onBarcodeScanned={barcodeScanned} ></CameraView>
-        <Modal animationType="slide" transparent={false} visible={isCreateItem && !isSearchingWeb}>
+        <Modal animationType="slide" transparent={false} visible={isSearchingWeb}>
+          <View style={[styles.container, {justifyContent: 'center'}]}>
+            <Text style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24, textAlign: 'center', fontFamily: 'Inter', fontSize: 24}}>
+            Fetching item from database
+            </Text>
+          </View>
+        </Modal>
+        <Modal animationType="slide" transparent={false} visible={isCreateItem}>
           {createItemModal(setItemInfo, setNewText, newText, cancelCreate)}
         </Modal>
         <Modal animationType="slide" transparent={false} visible={isAddItem}>
