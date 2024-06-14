@@ -12,7 +12,6 @@ export default function editItemModal(changeItemInfo, cancelEditItem, setNewText
         value={newText}
         autoFocus={false}
         onSubmitEditing={() => {if (newText=='') {setNewText(defaultText)}}}
-        onFocus={() => {setNewText(''); setDefaultText(newText)}}
       />
       
       <View style={{flexDirection: 'row', justifyContent: 'center',  alignItems: 'center', gap: '20%', width: '75%'}}>
