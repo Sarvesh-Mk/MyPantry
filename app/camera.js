@@ -49,7 +49,7 @@ export default function cameraPage() {
         }
       })
       .catch(error => {
-        console.error(error);
+        console.log(error.message);
       });
     setSearchWeb(false);
     
@@ -62,7 +62,7 @@ export default function cameraPage() {
 
   const incrementItem = async () => {
     var item = currentItem;
-    item.amount += 1;
+    item.amount = parseInt(item.amount) + 1;
     await AsyncStorage.setItem(currentId, JSON.stringify(item));
     setScanning(false);
     setIsAddItem(false);

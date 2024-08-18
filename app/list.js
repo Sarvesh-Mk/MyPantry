@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, FlatList, Modal ,Pressable} from 'react-native';
+import { StyleSheet, View, Text, TextInput, FlatList, Modal ,Pressable} from 'react-native';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image'
@@ -94,6 +94,14 @@ export default function listPage() {
     <View style={{height: '100%', alignItems: 'center'}}>
       <View style={styles.container}>
         <View style={styles.itemContainer}>
+          <TextInput
+            style={{width: 370, height: 80, flexDirection: 'row', paddingLeft: 14, paddingBottom: 10,  borderWidth: 4, borderRadius: 5, borderColor: '#000', justifyContent: 'center', alignSelf: 'center', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', fontSize: 24}}
+            // onChangeText={setNewText} 
+            value={'Search For Item'}
+            autoFocus={false}
+            // onSubmitEditing={() => {if (newText=='') {setNewText(defaultText)}}}
+            // onFocus={() => {setNewText(''); setDefaultText(newText)}}
+          />
           <FlatList 
             data={items}
             renderItem={({item}) => itemDisplay(item)}
