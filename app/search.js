@@ -3,10 +3,18 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import Navbar from '../components/navbar';
+import itemListView from '../components/itemListView';
 
 export default function searchPage(){
   const [items, setItems] = useState([]);
+  const [sortedItems, setSortedItems] = useState([])
+  const [searchText, setSearchText] = useState('Search For Item')
+
+  const modifyList = () => {
+    console.log('called');
+  }
 
   const fetchData = async () => {
     const keys = await AsyncStorage.getAllKeys();
@@ -17,23 +25,38 @@ export default function searchPage(){
       allItems.push(item);
     }
     setItems(allItems);
+    setSortedItems(allItems)
   }
   
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    modifyList();
+  }, [searchText]);
+
+  const editItem = async (id) => {
+    
+  }
+
   return(
     <View style={{height: '100%', alignItems: 'center'}}>
       <View style={styles.container}>
         <TextInput
           style={{width: 370, height: 80, flexDirection: 'row',  borderWidth: 4, borderRadius: 5, borderColor: '#000', justifyContent: 'center', alignSelf: 'center', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', fontSize: 24}}
-          // onChangeText={setNewText} 
-          value={'Search For Item'}
+          onChangeText={setSearchText} 
+          value={searchText}
           autoFocus={false}
-          // onSubmitEditing={() => {if (newText=='') {setNewText(defaultText)}}}
-          // onFocus={() => {setNewText(''); setDefaultText(newText)}}
-        />    
+          onSubmitEditing={() => {if (searchText=='') {setSearchText('Search Item Name')}}}
+          onFocus={() => {setSearchText('')}}
+        /> 
+        <FlatList 
+          data={sortedItems}
+          renderItem={({item}) => itemListView(item, editItem)}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator = {false}
+        /> 
       </View>
       <Navbar />
     </View>
