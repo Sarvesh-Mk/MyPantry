@@ -21,12 +21,14 @@ export default function cameraPage() {
   const [currentItem, setCurrentItem] = useState('');
   const [currentImageUrl, setImageUrl] = useState('');
   const [isSearchingWeb, setSearchWeb] = useState(false);
+  const [itemFound, setItemFound] = useState(false);
 
   const setItemInfo = async () => {
     if(newText != '') {
       await AsyncStorage.setItem(currentId, JSON.stringify({id: currentId, name: newText, amount: 1, image: currentImageUrl}));
       setNewText('');
       setIsCreateItem(false);
+      setItemFound(false);
       setScanning(false);
     }
   }
@@ -40,8 +42,10 @@ export default function cameraPage() {
           product = response.data.product; 
           setNewText(product.brands + ' ' + product.product_name);
           setImageUrl(product.image_url)
+          setItemFound(true);
         } else {
-          console.log('couldnt find item');
+          setNewText("Couldn't find item, click to enter manually")
+          setItemFound(false);
         }
       })
       .catch(error => {
@@ -74,11 +78,10 @@ export default function cameraPage() {
           setCurrentId(result.data);
           setCurrentItem(JSON.parse(value))
         } else {
-          setNewText('Add Item Name');
+          setNewText('Searching for Item');
           setCurrentId(result.data); 
           setSearchWeb(true);  
-          await getItemFromBarcode(result.data);
-          setIsCreateItem(true);
+          await getItemFromBarcode(result.data).then(setIsCreateItem(true))
         }
       } catch (e) {
         //console.log(e)
@@ -91,7 +94,7 @@ export default function cameraPage() {
       <View style={styles.container}>
         <CameraView style={styles.camera} facing='back' ref={(ref) => setCameraRef(ref)} onBarcodeScanned={barcodeScanned} ></CameraView>
         <Modal animationType="slide" transparent={false} visible={isCreateItem && !isSearchingWeb}>
-          {createItemModal(setItemInfo, setNewText, newText, cancelCreate)}
+          {createItemModal(setItemInfo, setNewText, newText, cancelCreate, !isSearchingWeb, itemFound)}
         </Modal>
         <Modal animationType="slide" transparent={false} visible={isAddItem}>
           <View style={[styles.container, {justifyContent: 'center', gap: 35}]}>

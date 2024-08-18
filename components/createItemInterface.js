@@ -1,6 +1,6 @@
-import { StyleSheet, View,  Text, TextInput, Pressable, KeyboardAvoidingView, Platform, } from 'react-native';
+import { StyleSheet, View,  Text, TextInput, Pressable, KeyboardAvoidingView, Platform, Keyboard, } from 'react-native';
 
-export default function createItemModal(setItemInfo, setNewText, newText, cancelCreate) {
+export default function createItemModal(setItemInfo, setNewText, newText, cancelCreate, editable, itemFound) {
   
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={[styles.container, {justifyContent: 'center', gap: 40, paddingTop: 50}]}>
@@ -9,6 +9,18 @@ export default function createItemModal(setItemInfo, setNewText, newText, cancel
         onChangeText={setNewText} 
         value={newText}
         autoFocus={false}
+        onFocus={
+          () => {
+            if(!itemFound){
+              if(editable){
+                setNewText('')
+              } else {
+                Keyboard.dismiss();
+              }
+            }
+            
+          }
+        }
         multiline={true}
       />
       <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: '20%'}}>
