@@ -27,6 +27,7 @@ export default function Navbar() {
       {barItem("home", () => {router.replace('/')})}
       {barItem("camera", () => {router.replace('/camera')})}
       {barItem("list", () => {router.replace('/list')})}
+      {barItem("search", () => {router.replace('/search')})}
       {barItem("cog", () => {router.replace('/settings')})}
     </View>
   )
