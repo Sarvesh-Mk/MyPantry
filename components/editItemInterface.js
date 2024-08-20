@@ -1,8 +1,33 @@
 import { StyleSheet, View, TextInput, Pressable, Text, KeyboardAvoidingView, Platform } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function editItemModal(changeItemInfo, cancelEditItem, setNewText, newText, amount, setAmount, RemoveItem) {
+
+export default function editItemModal(cancelEditItem, item_id, item, RemoveItem) {
+  //setNewText, newText, amount, setAmount, RemoveItem
   const [defaultText, setDefaultText] = useState('');
+
+  const [newText, setNewText] = useState('');
+  const [amount, setAmount] = useState(null);
+
+  const fetchData = () => {
+    setNewText(item.name);
+    setAmount(item.amount);
+    setDefaultText(item.name);
+  }
+
+  const changeItemInfo = async () => {
+    if(newText != '') {
+      item.name = newText;
+      item.amount = amount;
+      await AsyncStorage.setItem(item_id, JSON.stringify(item));
+      cancelEditItem();
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [item]);
 
   return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={[styles.container, {justifyContent: 'center', gap: 40, paddingTop: 50}]}>

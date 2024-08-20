@@ -7,17 +7,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import editItemModal from "../components/editItemInterface";
 import Navbar from "../components/navbar";
 import itemListView from '../components/itemListView';
+import removeItemModal from '../components/removeItem';
 
 export default function listPage() {
   const [items, setItems] = useState([]);
   const router = useRouter();
   const [isEditItem, setIsEditingItem] = useState(false);
-  const [editedItemID, setEditedItemID] = useState(null);
+  const [editedItemID, setEditedItemID] = useState('');
+  const [editedItem, setEditedItem] = useState({name: ''});
   const [isRemoveItem, setIsRemoveItem] = useState(false);
-
-  const [newText, setNewText] = useState('') 
-  const [editItemAmount, setEditItemAmount] = useState(null);
-  const [editItemName, setEditItemName] = useState('')
 
   const fetchData = async () => {
     const keys = await AsyncStorage.getAllKeys();
@@ -35,26 +33,11 @@ export default function listPage() {
   }, []);
 
   const editItem = async (id) => {
-    setIsEditingItem(true);
     var item = await AsyncStorage.getItem(id);
     item = JSON.parse(item)
     setEditedItemID(id);
-    setNewText(item.name);
-    setEditItemAmount(item.amount);
-    setEditItemName(item.name);
-  }
-
-  const changeItemInfo = async () => {
-    if(newText != '') {
-      var item = await AsyncStorage.getItem(editedItemID);
-      item = JSON.parse(item);
-      item.name = newText;
-      item.amount = editItemAmount;
-      await AsyncStorage.setItem(editedItemID, JSON.stringify(item));
-      setNewText('');
-      fetchData();
-      setIsEditingItem(false);
-    }
+    setEditedItem(item);
+    setIsEditingItem(true);
   }
 
   const removeItem = async () => {
@@ -75,28 +58,10 @@ export default function listPage() {
           />
         </View>
         <Modal animationType="slide" transparent={false} visible={isEditItem}>
-          {editItemModal(changeItemInfo, () => {setIsEditingItem(false)}, setNewText, newText, editItemAmount, setEditItemAmount, () => {setIsRemoveItem(true); setIsEditingItem(false)})}
+          {editItemModal(() => {setIsEditingItem(false); fetchData()}, editedItemID,  editedItem, () => {setIsRemoveItem(true); setIsEditingItem(false)})}
         </Modal>
         <Modal animationType="slide" transparent={false} visible={isRemoveItem}>
-          <View style={[styles.container, {justifyContent: 'center', gap: 35}]}>
-            <Text style={{width: '75%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 20, padding: 5, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}>{"Are you sure you want to delete " + editItemName + "?"}</Text>
-            <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', gap: '20%'}}>
-              <Pressable
-                style={{width: '30%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
-                onPress={removeItem}
-              >
-              <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>yes</Text>  
-              </Pressable> 
-
-              <Pressable
-                style={{width: '30%', alignSelf: 'center', textAlign: 'center', fontFamily: 'Inter', paddingVertical: 10, borderWidth: 4, borderRadius: 4, borderColor: '#000', fontSize: 24}}
-                onPress={() => {setIsRemoveItem(false); setIsEditingItem(true)}}
-              >
-              <Text style={{ textAlign: 'center', fontFamily: 'Inter', fontSize: 24 }}>no</Text>  
-              </Pressable>  
-            </View>
-             
-          </View>
+          {removeItemModal(removeItem, () => {setIsRemoveItem(false); setIsEditingItem(true)})}
         </Modal>
       </View>
       <Navbar />  
@@ -106,6 +71,7 @@ export default function listPage() {
   )
 
 }
+
 
 const styles = StyleSheet.create({
   container: {

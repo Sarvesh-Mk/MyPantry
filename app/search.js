@@ -6,14 +6,33 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Navbar from '../components/navbar';
 import itemListView from '../components/itemListView';
+import editItemModal from '../components/editItemInterface';
+import removeItemModal from '../components/removeItem';
 
 export default function searchPage(){
   const [items, setItems] = useState([]);
-  const [sortedItems, setSortedItems] = useState([])
-  const [searchText, setSearchText] = useState('Search For Item')
+  const [sortedItems, setSortedItems] = useState([]);
+  const defaultText = 'Search For Item'
+  const [searchText, setSearchText] = useState(defaultText);
+
+  const [isEditItem, setIsEditingItem] = useState(false);
+  const [editedItemID, setEditedItemID] = useState('');
+  const [editedItem, setEditedItem] = useState({name: ''});
+  const [isRemoveItem, setIsRemoveItem] = useState(false);
 
   const modifyList = () => {
-    console.log('called');
+    var tempList = [];
+    if(searchText != defaultText){
+      for (i in items) {
+        if(items[i].name.includes(searchText) || items[i].name.toLowerCase().includes(searchText)){
+          tempList.push(items[i]);
+        }
+      }  
+      setSortedItems(tempList);
+    } else {
+      setSortedItems(items);
+    }
+    
   }
 
   const fetchData = async () => {
@@ -37,8 +56,18 @@ export default function searchPage(){
   }, [searchText]);
 
   const editItem = async (id) => {
-    
+    var item = await AsyncStorage.getItem(id);
+    item = JSON.parse(item)
+    setEditedItemID(id);
+    setEditedItem(item);
+    setIsEditingItem(true);
   }
+
+  const removeItem = async () => {
+    await AsyncStorage.removeItem(editedItemID);
+    setIsRemoveItem(false);
+    fetchData();
+  } 
 
   return(
     <View style={{height: '100%', alignItems: 'center'}}>
@@ -48,15 +77,21 @@ export default function searchPage(){
           onChangeText={setSearchText} 
           value={searchText}
           autoFocus={false}
-          onSubmitEditing={() => {if (searchText=='') {setSearchText('Search Item Name')}}}
+          onSubmitEditing={() => {if (searchText=='') {setSearchText(defaultText)}}}
           onFocus={() => {setSearchText('')}}
         /> 
-        <FlatList 
+        <FlatList
           data={sortedItems}
           renderItem={({item}) => itemListView(item, editItem)}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator = {false}
-        /> 
+        />
+        <Modal animationType="slide" transparent={false} visible={isEditItem}>
+          {editItemModal(() => {setIsEditingItem(false); fetchData(); modifyList()}, editedItemID,  editedItem, () => {setIsRemoveItem(true); setIsEditingItem(false)})}
+        </Modal>
+        <Modal animationType="slide" transparent={false} visible={isRemoveItem}>
+          {removeItemModal(removeItem, () => {setIsRemoveItem(false); setIsEditingItem(true)})}
+        </Modal> 
       </View>
       <Navbar />
     </View>
