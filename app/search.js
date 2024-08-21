@@ -24,7 +24,7 @@ export default function searchPage(){
     var tempList = [];
     if(searchText != defaultText){
       for (i in items) {
-        if(items[i].name.includes(searchText) || items[i].name.toLowerCase().includes(searchText)){
+        if(items[i].name.includes(searchText) || items[i].name.includes(searchText.toLowerCase())){
           tempList.push(items[i]);
         }
       }  

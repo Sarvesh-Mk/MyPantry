@@ -35,6 +35,7 @@ export default function App() {
     <View style={{height: '100%', alignItems: 'center'}}>
       <View style={styles.container}>
         <Text style={{fontSize: 50, width: 300, height: 100, paddingBottom: 200, textAlign: 'center'}}>Welcome to Your Pantry!</Text>
+        <Text style={{fontSize: 25, width: 300, textAlign: 'center'}}>The best place to keep track of all your grocery Items!</Text>
         <View style={styles.footerContainer}>
         </View>
         <StatusBar style="auto" />
